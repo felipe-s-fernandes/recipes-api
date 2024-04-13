@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "nodemon": "^2.0.20",
+    "pg": "^8.9.0",
+    "uuid": "^9.0.0"
+  },
+  "name": "recipes-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -L index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/felipe-s-fernandes/recipes-api.git"
+  },
+  "author": "felipe-s-fernandes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/felipe-s-fernandes/recipes-api/issues"
+  },
+  "homepage": "https://github.com/felipe-s-fernandes/recipes-api#readme",
+  "devDependencies": {
+    "prettier": "3.2.5"
+  }
+}
