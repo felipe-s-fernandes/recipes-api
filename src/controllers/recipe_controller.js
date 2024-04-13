@@ -20,7 +20,7 @@ class RecipeController {
 
   async getRecipeByUserId(req, res) {
     try {
-      const userId = req.params.user_id;
+      const userId = req.params.id;
 
       const recipes = await recipeService.getRecipeByUserId(userId);
 
