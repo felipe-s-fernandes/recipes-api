@@ -1,4 +1,5 @@
 import recipeService from "../services/recipe_service.js";
+import { BadRequestException } from "../utils/exceptions.js";
 import HttpResponse from "../utils/http_response.js";
 
 class RecipeController {
@@ -18,11 +19,15 @@ class RecipeController {
     }
   }
 
-  async getRecipeByUserId(req, res) {
+  async getRecipesByUserId(req, res) {
     try {
-      const userId = req.params.id;
+      const recipeUserId = Number(req.params.id ?? NaN);
 
-      const recipes = await recipeService.getRecipeByUserId(userId);
+      if (isNaN(recipeUserId)) {
+        throw new BadRequestException("User id must be a number");
+      }
+
+      const recipes = await recipeService.getRecipesByUserId(recipeUserId);
 
       const response = new HttpResponse({
         statusCode: 200,
@@ -38,14 +43,30 @@ class RecipeController {
 
   async createRecipe(req, res) {
     try {
-      const userId = req.body.user_id;
-      const title = req.body.title;
-      const description = req.body.description;
+      const recipeUserId = Number(req.body.user_id ?? NaN);
+      const recipeTitle = String(req.body.title ?? "");
+      const recipeDescription = String(req.body.description ?? "");
+
+      if (isNaN(recipeUserId)) {
+        throw new BadRequestException("User id must be a number");
+      }
+
+      if (recipeTitle.length === 0) {
+        throw new BadRequestException(
+          "Recipe title must be a non-empty string",
+        );
+      }
+
+      if (recipeDescription.length === 0) {
+        throw new BadRequestException(
+          "Recipe title must be a non-empty string",
+        );
+      }
 
       const createdRecipe = await recipeService.createRecipe({
-        userId,
-        title,
-        description,
+        recipeUserId,
+        recipeTitle,
+        recipeDescription,
       });
 
       const response = new HttpResponse({

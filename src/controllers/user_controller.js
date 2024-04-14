@@ -1,5 +1,5 @@
 import userService from "../services/user_service.js";
-import { BadRequestException, Exception } from "../utils/exceptions.js";
+import { BadRequestException } from "../utils/exceptions.js";
 import HttpResponse from "../utils/http_response.js";
 
 class UserController {
@@ -21,9 +21,13 @@ class UserController {
 
   async getUserById(req, res) {
     try {
-      const id = req.params.id;
+      const userId = Number(req.params.id ?? NaN);
 
-      const user = await userService.getUserById(id);
+      if (isNaN(userId)) {
+        throw new BadRequestException("User id must be a number");
+      }
+
+      const user = await userService.getUserById(userId);
 
       const response = new HttpResponse({
         statusCode: 200,
@@ -39,9 +43,13 @@ class UserController {
 
   async createUser(req, res) {
     try {
-      const name = req.body.name;
+      const userName = String(req.body.name ?? "");
 
-      const createdUser = await userService.createUser({ name });
+      if (userName.length === 0) {
+        throw new BadRequestException("User name must be a non-empty string");
+      }
+
+      const createdUser = await userService.createUser({ userName });
 
       const response = new HttpResponse({
         statusCode: 200,
@@ -57,10 +65,18 @@ class UserController {
 
   async updateUserById(req, res) {
     try {
-      const id = req.params.id;
-      const name = req.body.name;
+      const userId = Number(req.params.id ?? NaN);
+      const userName = String(req.body.name ?? "");
 
-      const updatedUser = await userService.updateUser({ id, name });
+      if (isNaN(userId)) {
+        throw new BadRequestException("User id must be a number");
+      }
+
+      if (userName.length === 0) {
+        throw new BadRequestException("User name must be a non-empty string");
+      }
+
+      const updatedUser = await userService.updateUser({ userId, userName });
 
       const response = new HttpResponse({
         statusCode: 200,
@@ -76,9 +92,13 @@ class UserController {
 
   async deleteUserById(req, res) {
     try {
-      const id = req.params.id;
+      const userId = Number(req.params.id ?? NaN);
 
-      const deletedUser = await userService.deleteUserById(id);
+      if (isNaN(userId)) {
+        throw new BadRequestException("User id must be a number");
+      }
+
+      const deletedUser = await userService.deleteUserById(userId);
 
       const response = new HttpResponse({
         statusCode: 200,

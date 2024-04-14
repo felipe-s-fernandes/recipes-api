@@ -1,5 +1,5 @@
 import userRepository from "../repositories/user_repository.js";
-import { BadRequestException, NotFoundException } from "../utils/exceptions.js";
+import { NotFoundException } from "../utils/exceptions.js";
 
 class UserService {
   async getUsers() {
@@ -10,14 +10,8 @@ class UserService {
     }
   }
 
-  async getUserById(id) {
+  async getUserById(userId) {
     try {
-      const userId = Number(id ?? NaN);
-
-      if (isNaN(userId)) {
-        throw new BadRequestException("User id must be a number");
-      }
-
       const user = await userRepository.getUserById(userId);
 
       if (!user) {
@@ -30,14 +24,8 @@ class UserService {
     }
   }
 
-  async createUser({ name }) {
+  async createUser({ userName }) {
     try {
-      const userName = String(name ?? "");
-
-      if (userName.length === 0) {
-        throw new BadRequestException("User name must be a non-empty string");
-      }
-
       const createdUser = await userRepository.createUser({ userName });
 
       return createdUser;
@@ -46,19 +34,8 @@ class UserService {
     }
   }
 
-  async updateUser({ id, name }) {
+  async updateUser({ userId, userName }) {
     try {
-      const userId = Number(id ?? NaN);
-      const userName = String(name ?? "");
-
-      if (isNaN(userId)) {
-        throw new BadRequestException("User id must be a number");
-      }
-
-      if (userName.length === 0) {
-        throw new BadRequestException("User name must be a non-empty string");
-      }
-
       const userToUpdate = await userRepository.getUserById(userId);
 
       if (!userToUpdate) {
@@ -73,14 +50,8 @@ class UserService {
     }
   }
 
-  async deleteUserById(id) {
+  async deleteUserById(userId) {
     try {
-      const userId = Number(id ?? NaN);
-
-      if (isNaN(userId)) {
-        throw new BadRequestException("User id must be a number");
-      }
-
       const userToDelete = await userRepository.getUserById(userId);
 
       if (!userToDelete) {

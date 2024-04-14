@@ -1,6 +1,6 @@
 import recipeRepository from "../repositories/recipe_repository.js";
 import userRepository from "../repositories/user_repository.js";
-import { BadRequestException, NotFoundException } from "../utils/exceptions.js";
+import { NotFoundException } from "../utils/exceptions.js";
 
 class RecipeService {
   async getRecipes() {
@@ -11,14 +11,8 @@ class RecipeService {
     }
   }
 
-  async getRecipeByUserId(id) {
+  async getRecipesByUserId(recipeUserId) {
     try {
-      const recipeUserId = Number(id ?? NaN);
-
-      if (isNaN(recipeUserId)) {
-        throw new BadRequestException("User id must be a number");
-      }
-
       const recipeUser = await userRepository.getUserById(recipeUserId);
 
       if (!recipeUser) {
@@ -33,28 +27,8 @@ class RecipeService {
     }
   }
 
-  async createRecipe({ userId, title, description }) {
+  async createRecipe({ recipeUserId, recipeTitle, recipeDescription }) {
     try {
-      const recipeUserId = Number(userId ?? NaN);
-      const recipeTitle = String(title ?? "");
-      const recipeDescription = String(description ?? "");
-
-      if (isNaN(recipeUserId)) {
-        throw new BadRequestException("User id must be a number");
-      }
-
-      if (recipeTitle.length === 0) {
-        throw new BadRequestException(
-          "Recipe title must be a non-empty string",
-        );
-      }
-
-      if (recipeDescription.length === 0) {
-        throw new BadRequestException(
-          "Recipe title must be a non-empty string",
-        );
-      }
-
       const recipeUser = await userRepository.getUserById(recipeUserId);
 
       if (!recipeUser) {
