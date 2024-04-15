@@ -22,6 +22,12 @@ export class InternalServerException extends Exception {
   }
 }
 
+export class BadRequestException extends Exception {
+  constructor(error) {
+    super({ error: error, statusCode: 400 });
+  }
+}
+
 export class UnauthorizedException extends Exception {
   constructor(error) {
     super({ error: error, statusCode: 401 });
@@ -34,8 +40,8 @@ export class NotFoundException extends Exception {
   }
 }
 
-export class BadRequestException extends Exception {
+export class ConflictException extends Exception {
   constructor(error) {
-    super({ error: error, statusCode: 400 });
+    super({ error: error, statusCode: 409 });
   }
 }
