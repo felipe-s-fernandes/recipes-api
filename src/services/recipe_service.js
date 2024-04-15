@@ -1,6 +1,6 @@
 import recipeRepository from "../repositories/recipe_repository.js";
 import userRepository from "../repositories/user_repository.js";
-import { NotFoundException } from "../utils/exceptions.js";
+import { ConflictException, NotFoundException } from "../utils/exceptions.js";
 
 class RecipeService {
   async getRecipes() {
@@ -33,6 +33,13 @@ class RecipeService {
 
       if (!recipeUser) {
         throw new NotFoundException("User not found");
+      }
+
+      const userRecipes =
+        await recipeRepository.getRecipesByUserId(recipeUserId);
+
+      if (userRecipes.length >= 10) {
+        throw new ConflictException("User cannot have more than 10 recipes");
       }
 
       const createdRecipe = await recipeRepository.createRecipe({
