@@ -95,6 +95,28 @@ class RecipeRepository {
     }
   }
 
+  async updateRecipe({ recipeId, recipeTitle, recipeDescription }) {
+    try {
+      const result = await database.executeQuery({
+        query:
+          "UPDATE recipes SET title = $2, description = $3 WHERE id = $1 RETURNING *",
+        args: [recipeId, recipeTitle, recipeDescription],
+      });
+
+      const updatedRecipe = new Recipe({
+        id: result[0].id,
+        userId: result[0].user_id,
+        title: result[0].title,
+        description: result[0].description,
+      });
+
+      return updatedRecipe;
+    } catch (error) {
+      console.error(`RecipeRepository::editRecipe error [${error}]`);
+      throw new InternalServerException();
+    }
+  }
+
   async deleteRecipeById(recipeId) {
     try {
       const result = await database.executeQuery({

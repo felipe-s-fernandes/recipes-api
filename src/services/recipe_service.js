@@ -54,6 +54,26 @@ class RecipeService {
     }
   }
 
+  async updateRecipe({ recipeId, recipeTitle, recipeDescription }) {
+    try {
+      const recipeToUpdate = await recipeRepository.getRecipeById(recipeId);
+
+      if (!recipeToUpdate) {
+        throw NotFoundException("Recipe not found");
+      }
+
+      const updatedRecipe = await recipeRepository.updateRecipe({
+        recipeId,
+        recipeTitle,
+        recipeDescription,
+      });
+
+      return updatedRecipe;
+    } catch (exception) {
+      throw exception;
+    }
+  }
+
   async deleteRecipeById(recipeId) {
     try {
       const recipeToDelete = await recipeRepository.getRecipeById(recipeId);
