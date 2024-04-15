@@ -1,5 +1,4 @@
 import express from "express";
-//import cors from "cors";
 import { config } from "dotenv";
 
 import router from "./router.js";
@@ -20,7 +19,6 @@ export default class Server {
     this.#configEnvironment();
 
     this.app.use(express.json());
-    //this.app.use(cors());
 
     this.app.use(router);
 
