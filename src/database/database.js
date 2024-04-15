@@ -31,7 +31,7 @@ class Database {
 
       await client.query("COMMIT");
 
-      client.release;
+      client.release();
 
       return result.rows;
     } catch (error) {
