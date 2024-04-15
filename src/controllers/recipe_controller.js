@@ -80,6 +80,28 @@ class RecipeController {
       res.status(response.statusCode).json(response);
     }
   }
+
+  async deleteRecipeById(req, res) {
+    try {
+      const recipeId = Number(req.params.id ?? NaN);
+
+      if (isNaN(recipeId)) {
+        throw new BadRequestException("Recipe id must be a number");
+      }
+
+      const deletedRecipe = await recipeService.deleteRecipeById(recipeId);
+
+      const response = new HttpResponse({
+        statusCode: 200,
+        data: deletedRecipe,
+      });
+
+      res.status(response.statusCode).json(response);
+    } catch (exception) {
+      const response = HttpResponse.fromException(exception);
+      res.status(response.statusCode).json(response);
+    }
+  }
 }
 
 const recipeController = new RecipeController();

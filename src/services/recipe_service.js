@@ -46,6 +46,22 @@ class RecipeService {
       throw exception;
     }
   }
+
+  async deleteRecipeById(recipeId) {
+    try {
+      const recipeToDelete = await recipeRepository.getRecipeById(recipeId);
+
+      if (!recipeToDelete) {
+        throw new NotFoundException("Recipe not found");
+      }
+
+      const deletedRecipe = await recipeRepository.deleteRecipeById(recipeId);
+
+      return deletedRecipe;
+    } catch (exception) {
+      throw exception;
+    }
+  }
 }
 
 const recipeService = new RecipeService();
