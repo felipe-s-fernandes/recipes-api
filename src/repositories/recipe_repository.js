@@ -25,6 +25,31 @@ class RecipeRepository {
     }
   }
 
+  async getRecipeById(recipeId) {
+    try {
+      const result = await database.executeQuery({
+        query: "SELECT * FROM recipes WHERE id = $1",
+        args: [recipeId],
+      });
+
+      if (result.length === 0) {
+        return null;
+      }
+
+      const recipe = new Recipe({
+        id: result[0].id,
+        userId: result[0].user_id,
+        title: result[0].title,
+        description: result[0].description,
+      });
+
+      return recipe;
+    } catch (error) {
+      console.error(`RecipeRepository::getRecipeByRecipeId error [${error}]`);
+      throw new InternalServerException();
+    }
+  }
+
   async getRecipesByUserId(recipeUserId) {
     try {
       const results = await database.executeQuery({
@@ -66,6 +91,27 @@ class RecipeRepository {
       return createdRecipe;
     } catch (error) {
       console.error(`RecipeRepository::createRecipe error [${error}]`);
+      throw new InternalServerException();
+    }
+  }
+
+  async deleteRecipeById(recipeId) {
+    try {
+      const result = await database.executeQuery({
+        query: "DELETE FROM recipes WHERE id = $1 RETURNING *",
+        args: [recipeId],
+      });
+
+      const deletedRecipe = new Recipe({
+        id: result[0].id,
+        userId: result[0].user_id,
+        title: result[0].title,
+        description: result[0].description,
+      });
+
+      return deletedRecipe;
+    } catch (error) {
+      console.error(`RecipeRepository::deleteRecipeById error [${error}]`);
       throw new InternalServerException();
     }
   }
